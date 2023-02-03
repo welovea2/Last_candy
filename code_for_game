@@ -1,0 +1,78 @@
+print(f'You are playing Last Candy.\nThis is a two player game in which players pick the amount of candy they take from a specific box.\nYou get to choose the amount of boxes and candy you start with.\nThe player that takes the last piece of candy wins')
+#I use these variables to store the usernames.
+player1=str(input("Player 1 please enter your username: "))
+player2=str(input("Player 2 please enter your username: "))
+#I create a list that I'll use later in the program
+players=[player1,player2]
+#This is how the players choose the amount of boxes and candies they'll play with
+num_box=int(input('How many boxes do you want to play with? '))
+#This prevents the game from being played with 0 boxes.
+if num_box<=0:
+    print('Error, can not play with 0 or less boxes')
+    num_box=int(input('How many boxes do you want to play with? '))
+num_candy=int(input('How many pieces of candy do you want to play with? '))
+#This prevents the game from being played with 0 candy.
+if num_candy<=0:
+    print('Error, can not play with 0 or less pieces of candy')
+    num_candy=int(input('How many pieces of candy do you want to play with? '))
+#I create an empty list to store the  values for the game    
+box=[]
+for i in range(num_box):
+    box.append(num_candy)
+
+#This is how I display the game
+def display_game(list1:list[int])->str:
+    line1=''
+    line2=''
+    line3=''
+    for i in range(len(box)): 
+        line1+='-----   '
+        line2+=f'| {box[i]} |   '
+        line3+='-----   '
+    print(line1)
+    print(line2)
+    print(line3)
+
+display_game(box) 
+#I use i to keep track of whose turn it is.       
+i=0
+while True:
+    #If i is even it's player 1's turn.If not it's player 2's turn
+    if i%2==0:
+        current_player=player1
+    else:
+        current_player=player2 
+    i=i+1    
+    #I make a variable to store which box the player picked
+    box_number=int(input(f"\n{current_player}: What box are you taking candy from? "))
+    #I made a variable to store the actual index of the box
+    real_box=box_number-1
+    #This makes sure that only boxes that exist are picked
+    if box_number<1 or box_number>len(box):
+        print(f'Error number must be between 1 and {len(box)}')
+        real_box=int(input(f"{current_player}: What box are you taking candy from? "))-1
+    #This ensures that players can't take candy from empty boxes    
+    if box[real_box]<=0:
+        print('Error this box is empty')
+        real_box=int(input(f"{current_player}: What box are you taking candy from? "))-1
+    #This variable stores candy taken.    
+    candy_taken=int(input(f"{current_player}: How many pieces of candy are you taking? "))
+    #Made sure that you can't take 0 or negative candy
+    if candy_taken<=0:
+        print('Error candy taken can not be less than 0 ')
+        candy_taken=int(input(f"{current_player}: How many pieces of candy are you taking? "))
+    #This ensures that candy taken can't exceed the amount in the box
+    if candy_taken>box[real_box]and box[real_box]!=0:
+        print('Error you are taking more candy than the box has left')
+        candy_taken=int(input(f"{current_player}: How many pieces of candy are you taking? "))  
+
+                 
+    box[real_box]-=candy_taken
+    
+    display_game(box)
+
+    count=box.count(0)
+    if count==len(box):
+        print(f'\nGame Over!!!  {current_player} has taken the Last Candy {current_player} has won the game.')
+        break
+  
